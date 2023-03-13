@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EmployeeDetails"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/image"
+        android:layout_width="280dp"
+        android:layout_height="300dp"
+        android:layout_marginStart="60dp"
+        android:src="@drawable/image3"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Employee Name"
+        android:textSize="30sp"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
+        android:layout_below="@id/image"
+        android:id="@+id/EmployeeName"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Employee Role"
+        android:textSize="30sp"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/EmployeeName"
+        android:id="@+id/EmployeeRole"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Qualification"
+        android:textSize="30sp"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/EmployeeRole"
+        android:id="@+id/EmployeeQualification"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Salary"
+        android:textSize="30sp"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/EmployeeQualification"
+        android:id="@+id/EmployeeSalary"
+    />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Address"
+        android:textSize="30sp"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/EmployeeSalary"
+        android:id="@+id/EmployeeAddress"
+    />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:textSize="30sp"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/EmployeeAddress"
+        android:id="@+id/EmployeeEmail"
+        />
+
+    <TextView
+        android:id="@+id/EmployeeTelephone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/EmployeeEmail"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="15dp"
+        android:text="Telephone"
+        android:textSize="30sp" />
+        <ListView
+            android:layout_below="@id/EmployeeTelephone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:dividerHeight="2dp"
+            android:divider="@color/black"
+            android:id="@+id/taskview"
+            tools:listitem="@layout/task_item"
+            />
+        <Button
+            android:layout_below="@id/taskview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Fire Employee"
+            android:onClick="FireEmployee"
+            android:id="@+id/fire"
+            >
+
+        </Button>
+        <Button
+            android:layout_below="@id/fire"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Pay Employee"
+            >
+
+        </Button>
+
+    </RelativeLayout>
+</ScrollView>

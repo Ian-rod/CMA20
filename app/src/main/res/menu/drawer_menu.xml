@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<group android:checkableBehavior="single">
+    <item
+        android:id="@+id/EmployeeList"
+        android:title="Employees"
+        android:icon="@drawable/employees"
+       />
+        <item
+            android:id="@+id/addTasks"
+            android:title="Add Tasks"
+            android:icon="@drawable/tasks"
+            />
+        <item
+            android:id="@+id/checkTasks"
+            android:title="Check Tasks"
+            android:icon="@drawable/tasklist"
+            />
+    <item
+        android:id="@+id/logout"
+        android:title="Logout"
+        android:icon="@drawable/logout"
+        />
+</group>
+</menu>
