@@ -30,6 +30,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class EmployeePage extends AppCompatActivity{
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -37,6 +40,7 @@ public class EmployeePage extends AppCompatActivity{
     ActionBarDrawerToggle actionBarDrawerToggle;
     ActivityEmployeePageBinding binding;
     EmployeeAdapter adapter;
+    Map<String, Employee> roleMap=new HashMap<String, Employee>();
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -108,39 +112,40 @@ public class EmployeePage extends AppCompatActivity{
                             ActionBar appbar=getSupportActionBar();
                             appbar.setTitle("\tList of employees ");
                             for (QueryDocumentSnapshot document : task.getResult()) {
-
                                 Employee employee=new Employee(document.getData().get("Name").toString(),document.getData().get("Role").toString(),document.getData().get("Monthly Salary").toString(),document.getData().get("Qualification").toString(),document.getData().get("Telephone").toString(),document.getData().get("Address").toString(),document.getId(),document.getData().get("status").toString());
+                                roleMap.put(document.getData().get("Role").toString(),employee);
                                 employeeList.add(employee);
                             }
+                            System.out.println(employeeList);
+                            adapter= new EmployeeAdapter(
+                                    EmployeePage.this, employeeList
+                            );
+                            binding.listview.setAdapter(adapter);
+                            binding.listview.setClickable(true);
+                            binding.listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    //Pass data to the new page
+                                    Intent detailspage=new Intent(getApplicationContext(),EmployeeDetails.class);
+                                    detailspage.putExtra("EmployeeName", employeeList.get(position).name);
+                                    detailspage.putExtra("EmployeeRole", employeeList.get(position).role);
+                                    detailspage.putExtra("EmployeeStatus", employeeList.get(position).status);
+                                    detailspage.putExtra("EmployeeSalary", employeeList.get(position).salary);
+                                    detailspage.putExtra("EmployeeQualification", employeeList.get(position).qualification);
+                                    detailspage.putExtra("EmployeeEmail", employeeList.get(position).email);
+                                    detailspage.putExtra("EmployeeTelephone", employeeList.get(position).telephone);
+                                    detailspage.putExtra("EmployeeAddress", employeeList.get(position).address);
+                                    startActivity(detailspage);
 
+
+                                }
+                            });
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
-        adapter= new EmployeeAdapter(
-                EmployeePage.this, employeeList
-        );
-        binding.listview.setAdapter(adapter);
-        binding.listview.setClickable(true);
-        binding.listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Pass data to the new page
-                Intent detailspage=new Intent(getApplicationContext(),EmployeeDetails.class);
-                detailspage.putExtra("EmployeeName", employeeList.get(position).name);
-                detailspage.putExtra("EmployeeRole", employeeList.get(position).role);
-                detailspage.putExtra("EmployeeStatus", employeeList.get(position).status);
-                detailspage.putExtra("EmployeeSalary", employeeList.get(position).salary);
-                detailspage.putExtra("EmployeeQualification", employeeList.get(position).qualification);
-                detailspage.putExtra("EmployeeEmail", employeeList.get(position).email);
-                detailspage.putExtra("EmployeeTelephone", employeeList.get(position).telephone);
-                detailspage.putExtra("EmployeeAddress", employeeList.get(position).address);
-                startActivity(detailspage);
 
-
-            }
-        });
 
     }
 
@@ -155,12 +160,17 @@ public class EmployeePage extends AppCompatActivity{
             @Override
             public boolean onQueryTextSubmit(String query) {
                 //when user presses enter
+                if(roleMap.containsKey(query))
+                {
+                    System.out.println("Key is present");
+                    adapter.getFilter().filter(roleMap.get(query).toString());
+                }
                 return false;
             }
             @Override
             public boolean onQueryTextChange(String newText) {
                 //when text changes
-                adapter.getFilter().filter(newText);
+                //too tough to implement
                 return false;
             }
         });

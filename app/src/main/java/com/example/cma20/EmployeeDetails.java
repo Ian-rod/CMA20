@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import com.example.cma20.databinding.ActivityEmployeeDetailsBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -26,10 +28,14 @@ import com.google.android.gms.tasks.Task;
 
 import org.checkerframework.checker.units.qual.A;
 
+import java.nio.MappedByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EmployeeDetails extends AppCompatActivity {
     ActivityEmployeeDetailsBinding binding;
+    FirebaseFirestore database = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ActionBar appbar=getSupportActionBar();
@@ -64,7 +70,6 @@ public class EmployeeDetails extends AppCompatActivity {
     {
         //create the tasks table
         ArrayList<TaskClass> taskList=new ArrayList<TaskClass>();
-        FirebaseFirestore database = FirebaseFirestore.getInstance();
         database.collection("Tasks")//remove Mr fury here
                 .whereEqualTo("Assigned to", "bryanfury@gmail.com")
                 .get()
@@ -84,6 +89,7 @@ public class EmployeeDetails extends AppCompatActivity {
                             binding.taskview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                                     AlertDialog alert=new AlertDialog.Builder(EmployeeDetails.this).create();
                                     alert.setTitle("Task Completion");
                                     alert.setMessage("Please confirm that this task has been completed?");
@@ -91,6 +97,22 @@ public class EmployeeDetails extends AppCompatActivity {
                                             new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
+//                                                    HashMap<String,String> data=new HashMap<>();
+//                                                    d
+//                                                    database.collection("cities").document("LA")
+//                                                            .set(data)
+//                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                                                @Override
+//                                                                public void onSuccess(Void aVoid) {
+//                                                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+//                                                                }
+//                                                            })
+//                                                            .addOnFailureListener(new OnFailureListener() {
+//                                                                @Override
+//                                                                public void onFailure(@NonNull Exception e) {
+//                                                                    Log.w(TAG, "Error writing document", e);
+//                                                                }
+//                                                            });
                                                     dialog.dismiss();
                                                 }
                                             }
@@ -123,6 +145,8 @@ public class EmployeeDetails extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        //set status task to complete
+
                         dialog.dismiss();
                     }
                 }

@@ -1,7 +1,7 @@
 package com.example.cma20;
 
 public class Employee {
-   static String name,role,salary,qualification,telephone,address,email,status;
+    String name,role,salary,qualification,telephone,address,email,status;
 //    int image;
     //configure Image
 //email
