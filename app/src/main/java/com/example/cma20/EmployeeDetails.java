@@ -16,11 +16,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cma20.databinding.ActivityEmployeeDetailsBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -36,6 +38,9 @@ import java.util.Map;
 public class EmployeeDetails extends AppCompatActivity {
     ActivityEmployeeDetailsBinding binding;
     FirebaseFirestore database = FirebaseFirestore.getInstance();
+    Intent details;
+    ArrayList<HashMap<String,String>> taskdata= new ArrayList<>();
+    ArrayList<String> updateID=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ActionBar appbar=getSupportActionBar();
@@ -43,7 +48,6 @@ public class EmployeeDetails extends AppCompatActivity {
         appbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0000cd")));
         super.onCreate(savedInstanceState);
         binding= ActivityEmployeeDetailsBinding.inflate(getLayoutInflater());
-        Intent details=getIntent();
         //render each detail to a view
         setContentView(binding.getRoot());
         TextView name=findViewById(R.id.EmployeeName);
@@ -56,6 +60,7 @@ public class EmployeeDetails extends AppCompatActivity {
         //TextView status=findViewById(R.id.EmployeeName);
 
         //Assign passed values
+        details=getIntent();
         name.setText(details.getStringExtra("EmployeeName"));
         role.setText(details.getStringExtra("EmployeeRole"));
         salary.setText(details.getStringExtra("EmployeeSalary"));
@@ -71,7 +76,7 @@ public class EmployeeDetails extends AppCompatActivity {
         //create the tasks table
         ArrayList<TaskClass> taskList=new ArrayList<TaskClass>();
         database.collection("Tasks")//remove Mr fury here
-                .whereEqualTo("Assigned to", "bryanfury@gmail.com")
+                .whereEqualTo("Assigned to", details.getStringExtra("EmployeeEmail"))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -80,12 +85,19 @@ public class EmployeeDetails extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 TaskClass assignedTasks=new TaskClass(document.getData().get("Task Name").toString(),document.getData().get("Task Description").toString(),document.getData().get("status").toString());
+                                HashMap<String,String> data=new HashMap<>();
+                                data.put("Task Description",document.getData().get("Task Description").toString());
+                                data.put("Task Name",document.getData().get("Task Name").toString());
+                                data.put("Assigned to",details.getStringExtra("EmployeeEmail"));
+                                taskdata.add(data);
                                 taskList.add(assignedTasks);
+                                updateID.add(document.getId());
                             }
                             TaskAdapter adapter = new TaskAdapter(
                                     EmployeeDetails.this, taskList
                             );
                             binding.taskview.setAdapter(adapter);
+                            binding.taskview.setClickable(true);
                             binding.taskview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -97,22 +109,23 @@ public class EmployeeDetails extends AppCompatActivity {
                                             new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
-//                                                    HashMap<String,String> data=new HashMap<>();
-//                                                    d
-//                                                    database.collection("cities").document("LA")
-//                                                            .set(data)
-//                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                                                @Override
-//                                                                public void onSuccess(Void aVoid) {
-//                                                                    Log.d(TAG, "DocumentSnapshot successfully written!");
-//                                                                }
-//                                                            })
-//                                                            .addOnFailureListener(new OnFailureListener() {
-//                                                                @Override
-//                                                                public void onFailure(@NonNull Exception e) {
-//                                                                    Log.w(TAG, "Error writing document", e);
-//                                                                }
-//                                                            });
+                                                taskdata.get(position).put("status","Complete");
+                                                    database.collection("Tasks").document(updateID.get(position))
+                                                            .set(taskdata.get(position))
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                    Toast.makeText(getApplicationContext(), "Task status update successful",
+                                                                            Toast.LENGTH_LONG).show();
+                                                                }
+                                                            })
+                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    Toast.makeText(getApplicationContext(), "Task status update unsuccessful",
+                                                                            Toast.LENGTH_LONG).show();
+                                                                }
+                                                            });
                                                     dialog.dismiss();
                                                 }
                                             }

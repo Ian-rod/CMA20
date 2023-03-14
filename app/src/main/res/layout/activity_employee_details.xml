@@ -86,6 +86,7 @@
         android:layout_marginEnd="60dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
+        android:autoLink="email"
         android:layout_below="@id/EmployeeAddress"
         android:id="@+id/EmployeeEmail"
         />
@@ -100,6 +101,7 @@
         android:layout_marginEnd="60dp"
         android:layout_marginBottom="15dp"
         android:text="Telephone"
+        android:autoLink="phone"
         android:textSize="30sp" />
         <ListView
             android:layout_below="@id/EmployeeTelephone"

@@ -40,7 +40,6 @@ public class EmployeePage extends AppCompatActivity{
     ActionBarDrawerToggle actionBarDrawerToggle;
     ActivityEmployeePageBinding binding;
     EmployeeAdapter adapter;
-    Map<String, Employee> roleMap=new HashMap<String, Employee>();
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -91,6 +90,15 @@ public class EmployeePage extends AppCompatActivity{
                         break;
                     case  R.id.EmployeeList:
                         //employee page
+                        Intent employeepage=new Intent(getApplicationContext(),EmployeePage.class);
+                        startActivity(employeepage);
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+                    case R.id.checkTasks:
+                        //check the list of tasks
+                        Intent checktaskpage=new Intent(getApplicationContext(),TaskList.class);
+                        startActivity(checktaskpage);
+                        drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                 }
                 return true;
@@ -113,10 +121,8 @@ public class EmployeePage extends AppCompatActivity{
                             appbar.setTitle("\tList of employees ");
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Employee employee=new Employee(document.getData().get("Name").toString(),document.getData().get("Role").toString(),document.getData().get("Monthly Salary").toString(),document.getData().get("Qualification").toString(),document.getData().get("Telephone").toString(),document.getData().get("Address").toString(),document.getId(),document.getData().get("status").toString());
-                                roleMap.put(document.getData().get("Role").toString(),employee);
                                 employeeList.add(employee);
                             }
-                            System.out.println(employeeList);
                             adapter= new EmployeeAdapter(
                                     EmployeePage.this, employeeList
                             );
@@ -160,17 +166,15 @@ public class EmployeePage extends AppCompatActivity{
             @Override
             public boolean onQueryTextSubmit(String query) {
                 //when user presses enter
-                if(roleMap.containsKey(query))
-                {
-                    System.out.println("Key is present");
-                    adapter.getFilter().filter(roleMap.get(query).toString());
-                }
+                    adapter.getFilter().filter(query);
+
                 return false;
             }
             @Override
             public boolean onQueryTextChange(String newText) {
                 //when text changes
-                //too tough to implement
+                //Running a test run by overriding the to string method
+                adapter.getFilter().filter(newText);
                 return false;
             }
         });

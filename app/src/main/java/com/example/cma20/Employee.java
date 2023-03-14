@@ -1,5 +1,7 @@
 package com.example.cma20;
 
+import androidx.annotation.NonNull;
+
 public class Employee {
     String name,role,salary,qualification,telephone,address,email,status;
 //    int image;
@@ -16,4 +18,9 @@ public class Employee {
         this.status=status;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return role;
+    }
 }
