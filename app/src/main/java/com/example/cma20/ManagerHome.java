@@ -30,10 +30,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-public class EmployeePage extends AppCompatActivity{
+public class ManagerHome extends AppCompatActivity{
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
@@ -47,12 +45,6 @@ public class EmployeePage extends AppCompatActivity{
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.search) {
-            Log.i("Search","Search clicked");
-            //Search for Employees create onclick on the search icon
-            return true;
-        }
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
@@ -90,7 +82,7 @@ public class EmployeePage extends AppCompatActivity{
                         break;
                     case  R.id.EmployeeList:
                         //employee page
-                        Intent employeepage=new Intent(getApplicationContext(),EmployeePage.class);
+                        Intent employeepage=new Intent(getApplicationContext(), ManagerHome.class);
                         startActivity(employeepage);
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
@@ -124,7 +116,7 @@ public class EmployeePage extends AppCompatActivity{
                                 employeeList.add(employee);
                             }
                             adapter= new EmployeeAdapter(
-                                    EmployeePage.this, employeeList
+                                    ManagerHome.this, employeeList
                             );
                             binding.listview.setAdapter(adapter);
                             binding.listview.setClickable(true);

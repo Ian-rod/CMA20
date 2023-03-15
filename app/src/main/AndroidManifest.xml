@@ -12,6 +12,12 @@
         android:theme="@style/Theme.CMA20"
         tools:targetApi="31">
         <activity
+            android:name=".EDetails"
+            android:exported="false" />
+        <activity
+            android:name=".EmployeeHome"
+            android:exported="false" />
+        <activity
             android:name=".TaskList"
             android:exported="false" />
         <activity
@@ -24,7 +30,7 @@
             android:name=".EmployeeDetails"
             android:exported="false" />
         <activity
-            android:name=".EmployeePage"
+            android:name=".ManagerHome"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

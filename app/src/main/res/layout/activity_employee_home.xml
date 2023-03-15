@@ -4,14 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawerlayout"
-    tools:context=".ManagerHome">
+    android:id="@+id/Employeedrawer"
+    tools:context=".EmployeeHome">
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/NavigationView"
+        android:id="@+id/EmployeeNavigationView"
         app:headerLayout="@layout/drawer_header"
-        app:menu="@menu/drawer_menu"
+        app:menu="@menu/employeedrawer"
         android:fitsSystemWindows="true"
         android:layout_gravity="start"
         >
@@ -21,8 +21,8 @@
         android:layout_height="match_parent"
         android:dividerHeight="2dp"
         android:divider="@color/black"
-        android:id="@+id/listview"
-        tools:listitem="@layout/list_item"
+        android:id="@+id/EmployeeTaskview"
+        tools:listitem="@layout/task_item"
         />
 
 </androidx.drawerlayout.widget.DrawerLayout>

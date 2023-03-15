@@ -26,7 +26,13 @@ public class MainActivity extends AppCompatActivity {
         //animate the login button
         //navigate to Employees page
         //pass in Manager name on appbar th show the active Manager
-        Intent EmployeePage=new Intent(getApplicationContext(), EmployeePage.class);
+        Intent EmployeePage=new Intent(getApplicationContext(), ManagerHome.class);
         startActivity(EmployeePage);
     }
+    public void EmployeeHome(View view)
+    {
+        Intent employeehome=new Intent(getApplicationContext(), EmployeeHome.class);
+        startActivity(employeehome);
+    }
+
 }
