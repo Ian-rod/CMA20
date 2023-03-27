@@ -72,7 +72,8 @@ public class Signup extends Fragment {
                                 Toast.LENGTH_LONG).show();
                     }
                     else {
-                        //sign up a user
+                        //sign up a user'
+                        System.out.println("Email is "+email.getText().toString());
                         mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                     @Override
@@ -83,8 +84,8 @@ public class Signup extends Fragment {
                                                     Toast.LENGTH_LONG).show();
                                             FirebaseUser user = mAuth.getCurrentUser();
                                             //Take user to log in page
-                                            pager=myview.findViewById(R.id.view_pager);
-                                            pager.setCurrentItem(1);
+//                                            pager=(ViewPager) myview.findViewById(R.id.view_pager);
+//                                            pager.setCurrentItem(1);
                                           //send user details to database
                                             Map<String,String> data=new HashMap();
                                             data.put("Address",address.getText().toString());
@@ -93,7 +94,7 @@ public class Signup extends Fragment {
                                             data.put("Qualification",qualification.getText().toString());
                                             data.put("Role",Role.getText().toString());
                                             data.put("Telephone",Telephone.getText().toString());
-                                            data.put("Status","Free");
+                                            data.put("status","Free");
                                             database.collection("Employees").document(email.getText().toString())
                                                     .set(data)
                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -101,6 +102,8 @@ public class Signup extends Fragment {
                                                         public void onSuccess(Void aVoid) {
                                                             Toast.makeText(getContext(), "Credentials Saved successfully. ",
                                                                     Toast.LENGTH_SHORT).show();
+                                                            pager = myview.getRootView().findViewById(R.id.view_pager);
+                                                            pager.setCurrentItem(1);
                                                         }
                                                     })
                                                     .addOnFailureListener(new OnFailureListener() {

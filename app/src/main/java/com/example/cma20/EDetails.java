@@ -36,7 +36,7 @@ public class EDetails extends AppCompatActivity {
         TextView telephone=findViewById(R.id.ETelephone);
         TextView email=findViewById(R.id.EEmail);
         //get employee data from firebase
-        DocumentReference docRef = database.collection("Employees").document("bryanfury@gmail.com");
+        DocumentReference docRef = database.collection("Employees").document(UserDetails.CurrentUser);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
