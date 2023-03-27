@@ -73,7 +73,7 @@ public class ManagerHome extends AppCompatActivity{
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch(item.getItemId()) {
                     case R.id.addTasks:
-                        Intent taskpage=new Intent(getApplicationContext(),Tasks.class);
+                        Intent taskpage=new Intent(getApplicationContext(), Tasks.class);
                         startActivity(taskpage);
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;

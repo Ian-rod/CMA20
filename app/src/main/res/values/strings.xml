@@ -2,4 +2,8 @@
     <string name="app_name">CMA2.0</string>
     <string name="menu_open">Open</string>
     <string name="menu_close">Close</string>
+    <string name="title_activity_sign_log">SignLog</string>
+    <string name="tab_text_1">Sign Up</string>
+    <string name="tab_text_2">Employee Login</string>
+    <string name="tab_text_3">Manager Login</string>
 </resources>

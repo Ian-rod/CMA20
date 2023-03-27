@@ -61,11 +61,11 @@ public class EmployeeDetails extends AppCompatActivity {
 
         //Assign passed values
         details=getIntent();
-        name.setText(details.getStringExtra("EmployeeName"));
-        role.setText(details.getStringExtra("EmployeeRole"));
-        salary.setText(details.getStringExtra("EmployeeSalary"));
-        qualification.setText(details.getStringExtra("EmployeeQualification"));
-        address.setText(details.getStringExtra("EmployeeAddress"));
+        name.setText("Name: "+details.getStringExtra("EmployeeName"));
+        role.setText("Role: "+details.getStringExtra("EmployeeRole"));
+        salary.setText("Monthly Salary: "+details.getStringExtra("EmployeeSalary"));
+        qualification.setText("Qualification: "+details.getStringExtra("EmployeeQualification"));
+        address.setText("Physical Address: "+details.getStringExtra("EmployeeAddress"));
         telephone.setText(details.getStringExtra("EmployeeTelephone"));
         email.setText(details.getStringExtra("EmployeeEmail"));
         createTask();
