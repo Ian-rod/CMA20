@@ -1,6 +1,8 @@
 package com.example.cma20;
 
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Signup extends Fragment {
     View myview;
@@ -31,6 +45,8 @@ public class Signup extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         myview=inflater.inflate(R.layout.signup,container,false);
         signup=myview.findViewById(R.id.signup);
+        FirebaseAuth mAuth=FirebaseAuth.getInstance();
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,7 +60,7 @@ public class Signup extends Fragment {
                 qualification=myview.findViewById(R.id.qualification_edittext);
                 address=myview.findViewById(R.id.address_edittext);
                 //check empty
-                if(name.getText().toString()==""||email.getText().toString()==""||password.getText().toString()==""||Cpassword.getText().toString()==""||address.getText().toString()==""||Role.getText().toString()==""||Telephone.getText().toString()==""||qualification.getText().toString()=="")
+                if(name.getText().toString().isEmpty()||email.getText().toString().isEmpty()||password.getText().toString().isEmpty()||Cpassword.getText().toString().isEmpty()||address.getText().toString().isEmpty()||Role.getText().toString().isEmpty()||Telephone.getText().toString().isEmpty()||qualification.getText().toString().isEmpty())
                 {
                     Toast.makeText(getContext(), "Please fill out all the fields",
                             Toast.LENGTH_LONG).show();
@@ -57,10 +73,51 @@ public class Signup extends Fragment {
                     }
                     else {
                         //sign up a user
-
-                        //Take user to log in page
-                        pager=myview.findViewById(R.id.view_pager);
-                        pager.setCurrentItem(1);
+                        mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+                                            // Sign in success, update UI with the signed-in user's information
+                                            Toast.makeText(getContext(), "Sign up success ",
+                                                    Toast.LENGTH_LONG).show();
+                                            FirebaseUser user = mAuth.getCurrentUser();
+                                            //Take user to log in page
+                                            pager=myview.findViewById(R.id.view_pager);
+                                            pager.setCurrentItem(1);
+                                          //send user details to database
+                                            Map<String,String> data=new HashMap();
+                                            data.put("Address",address.getText().toString());
+                                            data.put("Monthly Salary","Ksh 5");
+                                            data.put("Name",name.getText().toString());
+                                            data.put("Qualification",qualification.getText().toString());
+                                            data.put("Role",Role.getText().toString());
+                                            data.put("Telephone",Telephone.getText().toString());
+                                            data.put("Status","Free");
+                                            database.collection("Employees").document(email.getText().toString())
+                                                    .set(data)
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            Toast.makeText(getContext(), "Credentials Saved successfully. ",
+                                                                    Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Toast.makeText(getContext(), "Error saving credentials ",
+                                                                    Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                        } else {
+                                            // If sign in fails, display a message to the user
+                                     Toast.makeText(getContext(), "Authentication failed. "+task.getException(),
+                                            Toast.LENGTH_LONG).show();
+//                                            updateUI(null);
+                                        }
+                                    }
+                                });
                     }
                 }
             }

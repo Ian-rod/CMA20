@@ -20,11 +20,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.cma20.databinding.ActivityEmployeePageBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -38,6 +41,7 @@ public class ManagerHome extends AppCompatActivity{
     ActionBarDrawerToggle actionBarDrawerToggle;
     ActivityEmployeePageBinding binding;
     EmployeeAdapter adapter;
+    FirebaseAuth mAuth;
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -53,6 +57,7 @@ public class ManagerHome extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mAuth = FirebaseAuth.getInstance();
         super.onCreate(savedInstanceState);
         binding=ActivityEmployeePageBinding.inflate(getLayoutInflater());
         ActionBar appbar=getSupportActionBar();
@@ -79,6 +84,11 @@ public class ManagerHome extends AppCompatActivity{
                         break;
                     case R.id.logout:
                         //log out
+                        FirebaseAuth.getInstance().signOut();
+                        Toast.makeText(getApplicationContext(), "Logged out of "+UserDetails.CurrentUser,
+                                Toast.LENGTH_LONG).show();
+                        Intent login=new Intent(getApplicationContext(),SignLog.class);
+                        startActivity(login);
                         break;
                     case  R.id.EmployeeList:
                         //employee page
@@ -97,7 +107,16 @@ public class ManagerHome extends AppCompatActivity{
             }
         });
     }
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser == null){
+            Toast.makeText(getApplicationContext(), "Not signed in",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
 
     public void getData() {
         FirebaseFirestore database = FirebaseFirestore.getInstance();
@@ -134,7 +153,6 @@ public class ManagerHome extends AppCompatActivity{
                                     detailspage.putExtra("EmployeeTelephone", employeeList.get(position).telephone);
                                     detailspage.putExtra("EmployeeAddress", employeeList.get(position).address);
                                     startActivity(detailspage);
-
 
                                 }
                             });

@@ -27,6 +27,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -42,6 +44,7 @@ public class EmployeeHome extends AppCompatActivity {
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ActionBarDrawerToggle actionBarDrawerToggle;
+    FirebaseAuth mAuth;
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -57,6 +60,7 @@ public class EmployeeHome extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
         binding=ActivityEmployeeHomeBinding.inflate(getLayoutInflater());
         ActionBar appbar=getSupportActionBar();
         appbar.setTitle("\t \t \tLoading...... ");
@@ -80,6 +84,11 @@ public class EmployeeHome extends AppCompatActivity {
                         break;
                     case R.id.logout:
                         //log out
+                        FirebaseAuth.getInstance().signOut();
+                        Toast.makeText(getApplicationContext(), "Logged out of "+UserDetails.CurrentUser,
+                                Toast.LENGTH_LONG).show();
+                        Intent login=new Intent(getApplicationContext(),SignLog.class);
+                        startActivity(login);
                         break;
                     case  R.id.EmployeeTasks:
                         //employee page
@@ -93,7 +102,7 @@ public class EmployeeHome extends AppCompatActivity {
         });
         ArrayList<TaskClass> taskList=new ArrayList<TaskClass>();
         database.collection("Tasks")//remove Mr mishima here
-                .whereEqualTo("Assigned to", "jipanchimishima@gmail.com")
+                .whereEqualTo("Assigned to", UserDetails.CurrentUser)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -164,5 +173,15 @@ public class EmployeeHome extends AppCompatActivity {
                         }
                     }
                 });
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser == null){
+            Toast.makeText(getApplicationContext(), "Not signed in",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 }

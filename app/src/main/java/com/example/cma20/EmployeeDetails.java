@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import com.example.cma20.databinding.ActivityEmployeeDetailsBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -50,6 +52,7 @@ public class EmployeeDetails extends AppCompatActivity {
         binding= ActivityEmployeeDetailsBinding.inflate(getLayoutInflater());
         //render each detail to a view
         setContentView(binding.getRoot());
+
         TextView name=findViewById(R.id.EmployeeName);
         TextView role=findViewById(R.id.EmployeeRole);
         TextView salary=findViewById(R.id.EmployeeSalary);
@@ -158,8 +161,48 @@ public class EmployeeDetails extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //set status task to complete
-
+                        //Fire
+                        //capture details move them to fired directory
+                        Map<String,String> data=new HashMap<>();
+                        data.put("Address",details.getStringExtra("EmployeeAddress"));
+                        data.put("Monthly Salary",details.getStringExtra("EmployeeSalary"));
+                        data.put("Name",details.getStringExtra("EmployeeName"));
+                        data.put("Qualification",details.getStringExtra("EmployeeQualification"));
+                        data.put("Role",details.getStringExtra("EmployeeRole"));
+                        data.put("Telephone",details.getStringExtra("EmployeeTelephone"));
+                        data.put("Status","Free");
+                        database.collection("Fired").document(details.getStringExtra("EmployeeEmail"))
+                                .set(data)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        //delete Employee details
+                                        database.collection("Employee").document(details.getStringExtra("EmployeeEmail"))
+                                                .delete()
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        System.out.println("Successfully deleted user.");
+                                                        Toast.makeText(getApplicationContext(), "FIRED!!",
+                                                                Toast.LENGTH_LONG).show();
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Toast.makeText(getApplicationContext(), "Error Firing",
+                                                                Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(getApplicationContext(), "Error Firing",
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                });
                         dialog.dismiss();
                     }
                 }
