@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -177,14 +178,13 @@ public class EmployeeDetails extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         //delete Employee details
-                                        database.collection("Employee").document(details.getStringExtra("EmployeeEmail"))
-                                                .delete()
-                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        database.collection("Employees").document(details.getStringExtra("EmployeeEmail"))
+                                                .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
-                                                        System.out.println("Successfully deleted user.");
-                                                        Toast.makeText(getApplicationContext(), "FIRED!!",
+                                                        Toast.makeText(getApplicationContext(), "EMPLOYEE FIRED SUCCESSFULLY",
                                                                 Toast.LENGTH_LONG).show();
+
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {
