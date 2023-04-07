@@ -101,5 +101,27 @@
             android:layout_marginBottom="15dp"
             android:text="Telephone"
             android:textSize="30sp" />
+        <TextView
+            android:id="@+id/EBank"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ETelephone"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="60dp"
+            android:layout_marginBottom="15dp"
+            android:text="Bank"
+            android:textSize="30sp" />
+        <TextView
+            android:id="@+id/EAccNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/EBank"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="60dp"
+            android:layout_marginBottom="15dp"
+            android:text="Bank Account Number"
+            android:textSize="30sp" />
     </RelativeLayout>
 </ScrollView>

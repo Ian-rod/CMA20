@@ -131,7 +131,7 @@ public class ManagerHome extends AppCompatActivity{
                             ActionBar appbar=getSupportActionBar();
                             appbar.setTitle("\tList of employees ");
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Employee employee=new Employee(document.getData().get("Name").toString(),document.getData().get("Role").toString(),document.getData().get("Monthly Salary").toString(),document.getData().get("Qualification").toString(),document.getData().get("Telephone").toString(),document.getData().get("Address").toString(),document.getId(),document.getData().get("status").toString());
+                                Employee employee=new Employee(document.getData().get("Name").toString(),document.getData().get("Role").toString(),document.getData().get("Monthly Salary").toString(),document.getData().get("Qualification").toString(),document.getData().get("Telephone").toString(),document.getData().get("Address").toString(),document.getId(),document.getData().get("status").toString(),document.getData().get("Bank").toString(),document.getData().get("AccNo").toString());
                                 employeeList.add(employee);
                             }
                             adapter= new EmployeeAdapter(
@@ -152,6 +152,8 @@ public class ManagerHome extends AppCompatActivity{
                                     detailspage.putExtra("EmployeeEmail", employeeList.get(position).email);
                                     detailspage.putExtra("EmployeeTelephone", employeeList.get(position).telephone);
                                     detailspage.putExtra("EmployeeAddress", employeeList.get(position).address);
+                                    detailspage.putExtra("EmployeeBank", employeeList.get(position).bank);
+                                    detailspage.putExtra("EmployeeAccNo", employeeList.get(position).acc);
                                     startActivity(detailspage);
 
                                 }

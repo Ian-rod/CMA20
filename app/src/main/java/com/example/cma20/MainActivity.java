@@ -15,8 +15,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActionBar appbar=getSupportActionBar();
-        appbar.setTitle("\t \t \tLogin Page");
-        appbar.setSubtitle("\t \t \tLog in as a Manager or an employee");
+        appbar.setTitle("Welcome");
+        appbar.setSubtitle("Log in as a Manager or an employee or sign up ");
         appbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0000cd")));
         setContentView(R.layout.activity_main);
     }

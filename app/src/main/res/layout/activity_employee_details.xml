@@ -103,8 +103,30 @@
         android:text="Telephone"
         android:autoLink="phone"
         android:textSize="30sp" />
-        <ListView
+        <TextView
+            android:id="@+id/EmployeeBank"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@id/EmployeeTelephone"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="60dp"
+            android:layout_marginBottom="15dp"
+            android:text="Bank"
+            android:textSize="30sp" />
+        <TextView
+            android:id="@+id/EmployeeAccNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/EmployeeBank"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="60dp"
+            android:layout_marginBottom="15dp"
+            android:text="Bank Account Number"
+            android:textSize="30sp" />
+        <ListView
+            android:layout_below="@id/EmployeeAccNo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:dividerHeight="2dp"
@@ -126,6 +148,7 @@
             android:layout_below="@id/fire"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:onClick="Payday"
             android:text="Pay Employee"
             >
 

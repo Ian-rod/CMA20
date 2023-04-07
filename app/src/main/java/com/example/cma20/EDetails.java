@@ -35,6 +35,8 @@ public class EDetails extends AppCompatActivity {
         TextView address=findViewById(R.id.EAddress);
         TextView telephone=findViewById(R.id.ETelephone);
         TextView email=findViewById(R.id.EEmail);
+        TextView Bank=findViewById(R.id.EBank);
+        TextView acc=findViewById(R.id.EAccNo);
         //get employee data from firebase
         DocumentReference docRef = database.collection("Employees").document(UserDetails.CurrentUser);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -51,6 +53,8 @@ public class EDetails extends AppCompatActivity {
                         qualification.setText(document.getData().get("Qualification").toString());
                         address.setText(document.getData().get("Address").toString());
                         telephone.setText(document.getData().get("Telephone").toString());
+                        Bank.setText(document.getData().get("Bank").toString());
+                        acc.setText(document.getData().get("AccNo").toString());
                         email.setText(document.getId());
                     } else {
                         Log.d(TAG, "No such document");

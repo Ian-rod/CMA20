@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -38,8 +40,10 @@ public class Signup extends Fragment {
     EditText Telephone;
     EditText qualification;
     EditText address;
+    Spinner Banks;
     Button signup;
     ViewPager pager;
+    EditText acc;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -47,6 +51,10 @@ public class Signup extends Fragment {
         signup=myview.findViewById(R.id.signup);
         FirebaseAuth mAuth=FirebaseAuth.getInstance();
         FirebaseFirestore database = FirebaseFirestore.getInstance();
+        Banks=myview.findViewById(R.id.spinner1);
+        String AvailableBanks[]={"Standard Chartered","Equity"};
+        ArrayAdapter<String> adapter=new ArrayAdapter<>(getContext(),android.R.layout.simple_spinner_dropdown_item,AvailableBanks);
+        Banks.setAdapter(adapter);
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,8 +67,9 @@ public class Signup extends Fragment {
                 Telephone=myview.findViewById(R.id.telephone_edittext);
                 qualification=myview.findViewById(R.id.qualification_edittext);
                 address=myview.findViewById(R.id.address_edittext);
+                acc=myview.findViewById(R.id.ACNO);
                 //check empty
-                if(name.getText().toString().isEmpty()||email.getText().toString().isEmpty()||password.getText().toString().isEmpty()||Cpassword.getText().toString().isEmpty()||address.getText().toString().isEmpty()||Role.getText().toString().isEmpty()||Telephone.getText().toString().isEmpty()||qualification.getText().toString().isEmpty())
+                if(name.getText().toString().isEmpty()||email.getText().toString().isEmpty()||password.getText().toString().isEmpty()||Cpassword.getText().toString().isEmpty()||address.getText().toString().isEmpty()||Role.getText().toString().isEmpty()||Telephone.getText().toString().isEmpty()||qualification.getText().toString().isEmpty()||acc.getText().toString().isEmpty())
                 {
                     Toast.makeText(getContext(), "Please fill out all the fields",
                             Toast.LENGTH_LONG).show();
@@ -83,9 +92,6 @@ public class Signup extends Fragment {
                                             Toast.makeText(getContext(), "Sign up success ",
                                                     Toast.LENGTH_LONG).show();
                                             FirebaseUser user = mAuth.getCurrentUser();
-                                            //Take user to log in page
-//                                            pager=(ViewPager) myview.findViewById(R.id.view_pager);
-//                                            pager.setCurrentItem(1);
                                           //send user details to database
                                             Map<String,String> data=new HashMap();
                                             data.put("Address",address.getText().toString());
@@ -95,6 +101,8 @@ public class Signup extends Fragment {
                                             data.put("Role",Role.getText().toString());
                                             data.put("Telephone",Telephone.getText().toString());
                                             data.put("status","Free");
+                                            data.put("Bank",Banks.getSelectedItem().toString());
+                                            data.put("AccNo",acc.getText().toString());
                                             database.collection("Employees").document(email.getText().toString())
                                                     .set(data)
                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {

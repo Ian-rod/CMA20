@@ -32,11 +32,19 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.android.gms.tasks.Task;
 
 import org.checkerframework.checker.units.qual.A;
+import org.json.JSONObject;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.MappedByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
+
+import io.grpc.internal.JsonParser;
 
 public class EmployeeDetails extends AppCompatActivity {
     ActivityEmployeeDetailsBinding binding;
@@ -61,6 +69,8 @@ public class EmployeeDetails extends AppCompatActivity {
         TextView address=findViewById(R.id.EmployeeAddress);
         TextView telephone=findViewById(R.id.EmployeeTelephone);
         TextView email=findViewById(R.id.EmployeeEmail);
+        TextView Bank=findViewById(R.id.EmployeeBank);
+        TextView acc=findViewById(R.id.EmployeeAccNo);
         //TextView status=findViewById(R.id.EmployeeName);
 
         //Assign passed values
@@ -70,6 +80,8 @@ public class EmployeeDetails extends AppCompatActivity {
         salary.setText("Monthly Salary: "+details.getStringExtra("EmployeeSalary"));
         qualification.setText("Qualification: "+details.getStringExtra("EmployeeQualification"));
         address.setText("Physical Address: "+details.getStringExtra("EmployeeAddress"));
+        Bank.setText("Bank: "+details.getStringExtra("EmployeeBank"));
+        acc.setText("ACC NO: "+details.getStringExtra("EmployeeAccNo"));
         telephone.setText(details.getStringExtra("EmployeeTelephone"));
         email.setText(details.getStringExtra("EmployeeEmail"));
         createTask();
@@ -157,7 +169,7 @@ public class EmployeeDetails extends AppCompatActivity {
         //place them in a fired employees section
         AlertDialog alert=new AlertDialog.Builder(EmployeeDetails.this).create();
         alert.setTitle("ALERT");
-        alert.setMessage("Are you sure you want to fire this employee?");
+        alert.setMessage("Are you sure you want to fire " +details.getStringExtra("EmployeeName")+" ?");
         alert.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -218,4 +230,42 @@ public class EmployeeDetails extends AppCompatActivity {
         alert.show();
     }
 
+    public void Payday(View view)
+    {
+        //confirm that you really wanna pay this guy
+        AlertDialog alert=new AlertDialog.Builder(EmployeeDetails.this).create();
+        alert.setTitle("ALERT");
+        alert.setMessage("Are you sure you want to pay " +details.getStringExtra("EmployeeName")+" "+details.getStringExtra("EmployeeSalary")+"?");
+        alert.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }
+        );
+        alert.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //make API calls to pay
+                            String paybill=details.getStringExtra("EmployeeBank").equals("Equity")?"247247":"329329";
+                            String amount=details.getStringExtra("EmployeeSalary").replace("Ksh","").trim();
+                            String accNo=details.getStringExtra("EmployeeAccNo");
+                            String managerNo="0768596147";
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    MyAsyncTask pay=new MyAsyncTask(paybill,accNo,amount,managerNo);
+                                    pay.doInBackground();
+                                }
+                            }).start();
+                        Toast.makeText(getApplicationContext(), "Payment is being processed",
+                                Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                    }
+                }
+        );
+        alert.show();
+    }
 }
